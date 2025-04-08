@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using ZXing;
 using PassthroughCameraSamples;
 using TMPro;
+using Meta.XR;
 
 public class QRScanner : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class QRScanner : MonoBehaviour
     [SerializeField] private WebCamTextureManager m_manager;
     [SerializeField] private GameObject m_cube;
     [SerializeField] private TextMeshPro m_debugText;
+
+    public Transform Camera;
+    public EnvironmentRaycastManager RaycastManager;
+    public GameObject Binder;
+
     private bool m_isScanning = false;
     private void Awake()
     {
@@ -50,7 +56,7 @@ public class QRScanner : MonoBehaviour
                     }
                     if (m_qrCode == "0742-PHA-FIP-CL2-3100")
                     {
-                        m_cube.SetActive(!m_cube.gameObject.activeSelf);
+                        OnQRScannedEvent();
                         break;
                     }
                 }
@@ -60,6 +66,7 @@ public class QRScanner : MonoBehaviour
         }
         m_manager.WebCamTexture.Stop();
         m_isScanning = false;
+        m_qrCode = string.Empty;
     }
 
     private void OnGUI()
@@ -85,7 +92,51 @@ public class QRScanner : MonoBehaviour
         }
         if (OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RHand))
         {
-            m_cube.SetActive(!m_cube.gameObject.activeSelf);
+            OnQRScannedEvent();
+        }
+        if (OVRInput.GetDown(OVRInput.Button.Two, OVRInput.Controller.RHand))
+        {
+            PlaceGameObject();
+        }
+    }
+
+    private void OnQRScannedEvent()
+    {
+        m_cube.SetActive(!m_cube.gameObject.activeSelf);
+        //PlaceGameObject();
+        //
+    }
+
+    public Transform PlaceGameObject()
+    {
+        if (EnvironmentRaycastManager.IsSupported)
+        {
+            transform.position = Camera.position;
+            //transform.LookAt(cameraPosition);
+
+            var ray = new Ray(Camera.position, transform.forward);
+            if (RaycastManager.Raycast(ray, out var hitInfo))
+            {
+                //transform.SetPositionAndRotation(
+                //    hitInfo.point,
+                //    Quaternion.LookRotation(hitInfo.normal, Vector3.up));
+                Binder.transform.SetPositionAndRotation(
+                    hitInfo.point,
+                    Quaternion.LookRotation(hitInfo.normal, Vector3.up));
+                Binder.SetActive(true);
+
+            }
+            else
+            {
+                Debug.Log("RaycastManager failed");
+            }
+
+            return transform;
+        }
+        else
+        {
+            Debug.LogError("EnvironmentRaycastManager is not supported");
+            return null;
         }
     }
 }
