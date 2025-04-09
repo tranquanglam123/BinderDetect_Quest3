@@ -12,7 +12,6 @@ public class QRScanner : MonoBehaviour
     //private WebCamTexture m_webcamTexture;
     private string m_qrCode = string.Empty;
     [SerializeField] private WebCamTextureManager m_manager;
-    [SerializeField] private GameObject m_cube;
     [SerializeField] private TextMeshPro m_debugText;
 
     public Transform Camera;
@@ -88,21 +87,18 @@ public class QRScanner : MonoBehaviour
         if (OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.LHand) && !m_isScanning)
         {
             m_isScanning = true;
-            StartCoroutine(GetQRCode());
+            _ = StartCoroutine(GetQRCode());
         }
-        if (OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RHand))
+
+        if (OVRInput.GetDown(OVRInput.Button.Two, OVRInput.Controller.LHand) || Input.GetKeyDown(KeyCode.S))
         {
             OnQRScannedEvent();
-        }
-        if (OVRInput.GetDown(OVRInput.Button.Two, OVRInput.Controller.RHand))
-        {
-            PlaceGameObject();
         }
     }
 
     private void OnQRScannedEvent()
     {
-        m_cube.SetActive(!m_cube.gameObject.activeSelf);
+        Binder.SetActive(!Binder.gameObject.activeSelf);
         //PlaceGameObject();
         //
     }
