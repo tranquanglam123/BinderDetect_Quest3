@@ -941,7 +941,15 @@ MonoBehaviour:
   resetHmdPoseOnRelease: 1
   resetHmdPoseByMiddleMouseButton: 1
   activateKeys: 3201000031010000
+  activateKeyBindings:
+  - <Keyboard>/leftCtrl
+  - <Keyboard>/rightCtrl
+  - <Keyboard>/f1
   pitchKeys: 3401000033010000
+  pitchKeyBindings:
+  - <Keyboard>/leftAlt
+  - <Keyboard>/rightAlt
+  - <Keyboard>/f2
 --- !u!114 &1629220520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1743,6 +1751,18 @@ PrefabInstance:
       propertyPath: OnObjectsDetected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6846995557286463107}
+    - target: {fileID: 2681575481727882275, guid: 927c1b782bb796b4b9b433d533cbccca, type: 3}
+      propertyPath: OnnxModel
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: ea0ab85258778284f866ba5b87d4a677, type: 3}
+    - target: {fileID: 2681575481727882275, guid: 927c1b782bb796b4b9b433d533cbccca, type: 3}
+      propertyPath: m_labelsAsset
+      value: 
+      objectReference: {fileID: 4900000, guid: c01c64149c7930b45a76559caabd5c78, type: 3}
+    - target: {fileID: 2681575481727882275, guid: 927c1b782bb796b4b9b433d533cbccca, type: 3}
+      propertyPath: m_sentisModel
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: f86c4f51dc90b4841a3b315565813731, type: 3}
     - target: {fileID: 5228241647023865434, guid: 927c1b782bb796b4b9b433d533cbccca, type: 3}
       propertyPath: m_Name
       value: SentisInferenceManagerPrefab

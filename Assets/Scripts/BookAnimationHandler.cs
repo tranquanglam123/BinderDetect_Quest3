@@ -9,10 +9,10 @@ public class BookAnimationHandler : MonoBehaviour
     private Transform m_currentBookPage;
     [SerializeField] private List<Transform> m_pagePivots = new();
 
-    private void Start()
-    {
-        TogglePageIndex();
-    }
+    //private void Start()
+    //{
+    //    TogglePageIndex();
+    //}
 
     private void Update()
     {
@@ -33,41 +33,46 @@ public class BookAnimationHandler : MonoBehaviour
 
     private void UpdatePageAnimation()
     {
-        m_subPageCounter++;
-        if (m_subPageCounter > 1)
+        //m_subPageCounter++;
+        //if (m_subPageCounter > 1)
+        //{
+        m_currentBookPage = m_pagePivots[m_pagePivotCounter];
+        if (m_pagePivotCounter > 0)
         {
-            m_currentBookPage.transform.Rotate(0, 0, 180); // rotate back the book page
-            m_pagePivotCounter++;
-            if (m_pagePivotCounter > 4)
-            {
-                ResetAnimationPage();
-            }
-            m_subPageCounter = 0;
-            TogglePageIndex();
+            m_pagePivots[m_pagePivotCounter - 1].gameObject.SetActive(false);
         }
+        m_currentBookPage.transform.Rotate(0, 0, 180); // rotate back the book page
+        m_pagePivotCounter++;
+        if (m_pagePivotCounter > 4)
+        {
+            ResetAnimationPage();
+        }
+        //m_subPageCounter = 0;
+        //TogglePageIndex();
+        //}
 
-        else
-        {
-            m_currentBookPage.transform.GetChild(0).gameObject.SetActive(false);
-            m_currentBookPage.transform.GetChild(1).gameObject.SetActive(true);
-            m_currentBookPage.transform.Rotate(0, 0, 180);
-        }
+        //else
+        //{
+        //    m_currentBookPage.transform.GetChild(0).gameObject.SetActive(false);
+        //    m_currentBookPage.transform.GetChild(1).gameObject.SetActive(true);
+        //    m_currentBookPage.transform.Rotate(0, 0, 180);
+        //}
 
     }
 
     private void TogglePageIndex()
     {
-        foreach (var page in m_pagePivots)
-        {
-            page.gameObject.SetActive(false);
-        }
-        m_pagePivots[m_pagePivotCounter].gameObject.SetActive(true);
-        m_currentBookPage = m_pagePivots[m_pagePivotCounter].GetChild(0);
-        m_currentBookPage.transform.Rotate(0, 0, 0);
+        //foreach (var page in m_pagePivots)
+        //{
+        //    page.gameObject.SetActive(false);
+        //}
+        //m_pagePivots[m_pagePivotCounter].gameObject.SetActive(true);
+        m_currentBookPage = m_pagePivots[m_pagePivotCounter]/*.GetChild(0)*/;
+        m_currentBookPage.transform.Rotate(0, 0, 180);
 
         // Inactive the later page and active the first page
-        m_currentBookPage.transform.GetChild(1).gameObject.SetActive(false);
-        m_currentBookPage.transform.GetChild(0).gameObject.SetActive(true);
+        //m_currentBookPage.transform.GetChild(1).gameObject.SetActive(false);
+        //m_currentBookPage.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     private void TogglePinchFlag()
@@ -78,7 +83,12 @@ public class BookAnimationHandler : MonoBehaviour
     private void ResetAnimationPage()
     {
         m_pagePivotCounter = 0;
-        m_subPageCounter = 0;
-        TogglePageIndex();
+        //m_subPageCounter = 0;
+        //TogglePageIndex();
+        foreach (var child in m_pagePivots)
+        {
+            child.gameObject.SetActive(true);
+            child.transform.Rotate(0, 0, 180);
+        }
     }
 }

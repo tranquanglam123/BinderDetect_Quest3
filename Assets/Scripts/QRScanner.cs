@@ -49,19 +49,27 @@ public class QRScanner : MonoBehaviour
                 if (result != null)
                 {
                     m_qrCode = result.Text;
-                    if (!string.IsNullOrEmpty(m_qrCode))
-                    {
-                        m_debugText.text = "DECODED TEXT FROM QR: " + m_qrCode;
-                    }
+                    //if (!string.IsNullOrEmpty(m_qrCode))
+                    //{
+                    //    m_debugText.text = "DECODED TEXT FROM QR: " + m_qrCode;
+                    //}
                     if (m_qrCode == "0742-PHA-FIP-CL2-3100")
                     {
-                        OnQRScannedEvent();
+                        OnDetectOpen();
+                        m_debugText.text = "DECODED TEXT FROM QR: OPEN";
                         break;
                     }
+                    if (m_qrCode == "MartinTheXR_BinderDetect")
+                    {
+                        OnDetectClose();
+                        m_debugText.text = "DECODED TEXT FROM QR: CLOSE";
+                        break;
+                    }
+
                 }
             }
             catch (Exception ex) { Debug.LogWarning(ex.Message); m_debugText.text = ex.Message; }
-            yield return null;
+            yield return new WaitForSeconds(2);
         }
         m_manager.WebCamTexture.Stop();
         m_isScanning = false;
@@ -92,16 +100,23 @@ public class QRScanner : MonoBehaviour
 
         if (OVRInput.GetDown(OVRInput.Button.Two, OVRInput.Controller.LHand) || Input.GetKeyDown(KeyCode.S))
         {
-            OnQRScannedEvent();
+            Binder.SetActive(!Binder.activeSelf);
         }
     }
 
-    private void OnQRScannedEvent()
+    private void OnDetectOpen()
     {
-        Binder.SetActive(!Binder.gameObject.activeSelf);
+        Binder.SetActive(true);
         //PlaceGameObject();
         //
     }
+    private void OnDetectClose()
+    {
+        Binder.SetActive(false);
+        //PlaceGameObject();
+        //
+    }
+
 
     public Transform PlaceGameObject()
     {
